@@ -2,13 +2,13 @@
 const express = require('express');
 const app = express();
 const port = 3000;
+
 /**
  * Static Server Middleware
  *
  * @param {String} root - Public directory / Dist / Src
  * @param {Object} options
  */
-
 const fileServerMiddleware = express.static('public');
 
 /**
@@ -17,7 +17,6 @@ const fileServerMiddleware = express.static('public');
  * @param {String} Path - Defaults to '/'
  * @param {Function} Handler
  */
-
 app.use('/', fileServerMiddleware);
 
 // Run with `$ node server.js`
