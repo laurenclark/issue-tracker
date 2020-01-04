@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Sandbox</title>
+        <script
+            crossorigin
+            src="https://unpkg.com/react@16/umd/react.production.min.js"
+        ></script>
+        <script
+            crossorigin
+            src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"
+        ></script>
+        <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
+        <style>
+            .poopy {
+                background: pink;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="content"></div>
+        <script type="text/babel">
+            const elem = (
+                <div className="poopy" title="Outer Div">
+                    <h1>Hello World!</h1>
+                </div>
+            );
+
+            ReactDOM.render(elem, document.getElementById('content'));
+        </script>
+    </body>
+</html>
