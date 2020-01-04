@@ -1,14 +1,15 @@
 {
-  "name": "mern-example",
-  "version": "1.0.0",
-  "description": "A mern stack example",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Lauren Clark",
-  "license": "ISC",
-  "dependencies": {
-    "express": "^4.17.1"
-  }
+    "name": "mern-example",
+    "version": "1.0.0",
+    "description": "A mern stack example",
+    "main": "index.js",
+    "scripts": {
+        "start": "node server/server.js",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Lauren Clark",
+    "license": "ISC",
+    "dependencies": {
+        "express": "^4.17.1"
+    }
 }
