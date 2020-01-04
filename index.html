@@ -13,7 +13,7 @@
         ></script>
         <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
         <style>
-            .poopy {
+            .myClass {
                 background: pink;
             }
         </style>
@@ -22,11 +22,10 @@
         <div id="content"></div>
         <script type="text/babel">
             const elem = (
-                <div className="poopy" title="Outer Div">
+                <div className="myClass" title="Outer Div">
                     <h1>Hello World!</h1>
                 </div>
             );
-
             ReactDOM.render(elem, document.getElementById('content'));
         </script>
     </body>
