@@ -2,9 +2,10 @@
     "name": "mern-example",
     "version": "1.0.0",
     "description": "A mern stack example",
-    "main": "index.js",
+    "main": "public/index.html",
     "scripts": {
-        "start": "nodemon -w server/server.js",
+        "start": "node server/server.js",
+        "startmon": "nodemon -w server/server.js",
         "compile": "babel src --out-dir public",
         "watch": "babel src --out-dir public --watch --verbose",
         "test": "echo \"Error: no test specified\" && exit 1"

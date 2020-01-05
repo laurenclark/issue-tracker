@@ -4,20 +4,12 @@ const app = express();
 const port = 3000;
 
 /**
- * Static Server Middleware
- *
- * @param {String} root - Public directory / Dist / Src
- * @param {Object} options
- */
-const fileServerMiddleware = express.static('public');
-
-/**
  * Mount with 'Use'
  *
  * @param {String} Path - Defaults to '/'
  * @param {Function} Handler
  */
-app.use('/', fileServerMiddleware);
+app.use(express.static('public'));
 
 // Run with `$ node server.js`
 app.listen(port, () => {
