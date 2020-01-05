@@ -8,7 +8,7 @@ class IssueTable extends React.Component {
     render() {
         const rowStyle = { border: '1px solid silver', padding: 4 };
         return (
-            <table style={{ borderCollapse: 'collapse' }}>
+            <table style={{ borderCollapse: 'collapse' }} border="4">
                 <thead>
                     <tr>
                         <th style={rowStyle}>ID</th>
@@ -16,16 +16,14 @@ class IssueTable extends React.Component {
                     </tr>
                 </thead>
                 <tbody>
-                    <IssueRow
-                        rowStyle={rowStyle}
-                        issue_id={1}
-                        issue_title="Error in console when clicking add"
-                    />
-                    <IssueRow
-                        rowStyle={rowStyle}
-                        issue_id={2}
-                        issue_title="Missing bottom border on panelA"
-                    />
+                    <IssueRow rowStyle={rowStyle} issue_id={1}>
+                        Error in console when clicking add.
+                    </IssueRow>
+                    <IssueRow rowStyle={rowStyle} issue_id={2}>
+                        <div>
+                            Missing <strong>bottom</strong> border on panel
+                        </div>
+                    </IssueRow>
                 </tbody>
             </table>
         );
@@ -37,7 +35,9 @@ class IssueRow extends React.Component {
         return (
             <tr>
                 <td style={style}>{this.props.issue_id}</td>
-                <td style={style}>{this.props.issue_title}</td>
+                {/* 💡 We use props.children to pass in styled text or multiple  */}
+                {/* elements which are nested as children of the parent componet */}
+                <td style={style}>{this.props.children}</td>
             </tr>
         );
     }
