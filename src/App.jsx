@@ -35,6 +35,7 @@ class IssueRow extends React.Component {
                 <td>{issue.owner}</td>
                 <td>{issue.created.toDateString()}</td>
                 <td>{issue.effort}</td>
+                {/*  💡 We always check the property exists as a truthy value before we perform a method on it */}
                 <td>{issue.due ? issue.due.toDateString() : ''}</td>
                 <td>{issue.title}</td>
             </tr>
@@ -44,8 +45,15 @@ class IssueRow extends React.Component {
 
 class IssueTable extends React.Component {
     render() {
+        // 💡 You should always use a unique identifier from the dataset like an ID
+        // Never use the Array index (things.indexOf(thing))
+        // This is because if an item is removed/changed, React uses that identifier
+        // decide whether or not to re-render, so you would always be rerendering on deletion
+        // which is unperformant and defeats the purpose of using a reactive library
+        // it can also cause a bug where React doesn't know which item to remove in order
+        // See: https://stackoverflow.com/questions/46735483/error-do-not-use-array-index-in-keys
         const issueRows = issues.map(issue => (
-            <IssueRow key={issue.id} issue={issue} />
+            <IssueRow key={issue.index} issue={issue} />
         ));
 
         return (
@@ -61,7 +69,11 @@ class IssueTable extends React.Component {
                         <th>Title</th>
                     </tr>
                 </thead>
-                <tbody>{issueRows}</tbody>
+                <tbody>
+                    {issues.map(issue => (
+                        <IssueRow key={issue.id} issue={issue} />
+                    ))}
+                </tbody>
             </table>
         );
     }
