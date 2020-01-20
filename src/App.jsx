@@ -70,9 +70,10 @@ class IssueTable extends React.Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {issues.map(issue => (
+                    {/* {issues.map(issue => (
                         <IssueRow key={issue.id} issue={issue} />
-                    ))}
+                    ))} */}
+                    {issueRows}
                 </tbody>
             </table>
         );
