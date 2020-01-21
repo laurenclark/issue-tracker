@@ -19,8 +19,6 @@ const initialIssues = [
     }
 ];
 
-let count = 0;
-
 const sampleIssue = {
     status: 'New',
     owner: 'Lauren',
@@ -33,34 +31,6 @@ class IssueFilter extends React.Component {
     }
 }
 class IssueTable extends React.Component {
-    constructor() {
-        super();
-        this.state = { issues: [] };
-        setTimeout(() => {
-            this.createIssue(sampleIssue);
-        }, 2000);
-    }
-
-    componentDidMount() {
-        this.loadData();
-    }
-
-    loadData() {
-        setTimeout(() => {
-            this.setState({ issues: initialIssues });
-        }, 500);
-    }
-
-    createIssue(issue) {
-        // Basic incremento spell
-        issue.id = this.state.issues.length + 1;
-        issue.created = new Date();
-        // Nothing specified so we're just copying the current array
-        const newIssueList = this.state.issues.slice();
-        newIssueList.push(issue);
-        this.setState({ issues: newIssueList });
-    }
-
     render() {
         // 💡 You should always use a unique identifier from the dataset like an ID
         // Never use the Array index (things.indexOf(thing))
@@ -69,7 +39,7 @@ class IssueTable extends React.Component {
         // which is unperformant and defeats the purpose of using a reactive library
         // it can also cause a bug where React doesn't know which item to remove in order
         // See: https://stackoverflow.com/questions/46735483/error-do-not-use-array-index-in-keys
-        const issueRows = this.state.issues.map(issue => (
+        const issueRows = this.props.issues.map(issue => (
             <IssueRow key={issue.index} issue={issue} />
         ));
 
@@ -99,7 +69,6 @@ class IssueTable extends React.Component {
 
 class IssueRow extends React.Component {
     render() {
-        console.log(count++);
         const issue = this.props.issue;
         return (
             <tr>
@@ -125,13 +94,40 @@ class IssueAdd extends React.Component {
 }
 
 class IssueList extends React.Component {
+    constructor() {
+        super();
+        this.state = { issues: [] };
+        setTimeout(() => {
+            this.createIssue(sampleIssue);
+        }, 2000);
+    }
+
+    componentDidMount() {
+        this.loadData();
+    }
+
+    loadData() {
+        setTimeout(() => {
+            this.setState({ issues: initialIssues });
+        }, 500);
+    }
+
+    createIssue(issue) {
+        // Basic incremento spell
+        issue.id = this.state.issues.length + 1;
+        issue.created = new Date();
+        // Nothing specified so we're just copying the current array
+        const newIssueList = this.state.issues.slice();
+        newIssueList.push(issue);
+        this.setState({ issues: newIssueList });
+    }
     render() {
         return (
             <React.Fragment>
                 <h1>Issue Tracker</h1>
                 <IssueFilter />
                 <hr />
-                <IssueTable />
+                <IssueTable issues={this.state.issues} />
                 <hr />
                 <IssueAdd />
             </React.Fragment>
