@@ -5,7 +5,7 @@ node_modules/
 npm-debug.log
 .idea/
 .vscode/
-public/*
+public/*.js
 dist
 coverage/
 yarn.lock
