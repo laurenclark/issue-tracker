@@ -1,4 +1,4 @@
-const issues = [
+const initialIssues = [
     {
         id: 1,
         status: 'New',
@@ -19,33 +19,48 @@ const issues = [
     }
 ];
 
+let count = 0;
+
+const sampleIssue = {
+    status: 'New',
+    owner: 'Lauren',
+    title: 'Completion date should be optional'
+};
+
 class IssueFilter extends React.Component {
     render() {
         return <div>This is a placeholder for the issue filter.</div>;
     }
 }
-
-class IssueRow extends React.Component {
-    render() {
-        const issue = this.props.issue;
-        return (
-            <tr>
-                <td>{issue.id}</td>
-                <td>{issue.status}</td>
-                <td>{issue.owner}</td>
-                {/* This will always be here or else the issue wasn't created :p */}
-                <td>{issue.created.toDateString()}</td>
-                <td>{issue.effort}</td>
-                {/*  💡 We always check the property exists as a truthy value
-                        before we perform a method on it */}
-                <td>{issue.due ? issue.due.toDateString() : ''}</td>
-                <td>{issue.title}</td>
-            </tr>
-        );
-    }
-}
-
 class IssueTable extends React.Component {
+    constructor() {
+        super();
+        this.state = { issues: [] };
+        setTimeout(() => {
+            this.createIssue(sampleIssue);
+        }, 2000);
+    }
+
+    componentDidMount() {
+        this.loadData();
+    }
+
+    loadData() {
+        setTimeout(() => {
+            this.setState({ issues: initialIssues });
+        }, 500);
+    }
+
+    createIssue(issue) {
+        // Basic incremento spell
+        issue.id = this.state.issues.length + 1;
+        issue.created = new Date();
+        // Nothing specified so we're just copying the current array
+        const newIssueList = this.state.issues.slice();
+        newIssueList.push(issue);
+        this.setState({ issues: newIssueList });
+    }
+
     render() {
         // 💡 You should always use a unique identifier from the dataset like an ID
         // Never use the Array index (things.indexOf(thing))
@@ -54,7 +69,7 @@ class IssueTable extends React.Component {
         // which is unperformant and defeats the purpose of using a reactive library
         // it can also cause a bug where React doesn't know which item to remove in order
         // See: https://stackoverflow.com/questions/46735483/error-do-not-use-array-index-in-keys
-        const issueRows = issues.map(issue => (
+        const issueRows = this.state.issues.map(issue => (
             <IssueRow key={issue.index} issue={issue} />
         ));
 
@@ -78,6 +93,27 @@ class IssueTable extends React.Component {
                     {issueRows}
                 </tbody>
             </table>
+        );
+    }
+}
+
+class IssueRow extends React.Component {
+    render() {
+        console.log(count++);
+        const issue = this.props.issue;
+        return (
+            <tr>
+                <td>{issue.id}</td>
+                <td>{issue.status}</td>
+                <td>{issue.owner}</td>
+                {/* This will always be here or else the issue wasn't created :p */}
+                <td>{issue.created.toDateString()}</td>
+                <td>{issue.effort}</td>
+                {/*  💡 We always check the property exists as a truthy value
+                        before we perform a method on it */}
+                <td>{issue.due ? issue.due.toDateString() : ''}</td>
+                <td>{issue.title}</td>
+            </tr>
         );
     }
 }
