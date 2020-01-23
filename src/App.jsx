@@ -88,6 +88,12 @@ class IssueRow extends React.Component {
 }
 
 class IssueAdd extends React.Component {
+    constructor() {
+        super();
+        setTimeout(() => {
+            this.props.createIssue(sampleIssue);
+        }, 2000);
+    }
     render() {
         return <div>This is a placeholder for a form to add an issue.</div>;
     }
@@ -97,9 +103,6 @@ class IssueList extends React.Component {
     constructor() {
         super();
         this.state = { issues: [] };
-        setTimeout(() => {
-            this.createIssue(sampleIssue);
-        }, 2000);
     }
 
     componentDidMount() {
@@ -129,7 +132,7 @@ class IssueList extends React.Component {
                 <hr />
                 <IssueTable issues={this.state.issues} />
                 <hr />
-                <IssueAdd />
+                <IssueAdd createIssue={this.createIssue.bind(this)} />
             </React.Fragment>
         );
     }
