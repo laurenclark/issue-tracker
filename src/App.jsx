@@ -132,6 +132,7 @@ class IssueList extends React.Component {
                 <hr />
                 <IssueTable issues={this.state.issues} />
                 <hr />
+                {/* { Bind this to IssueAdd in context of where it's called } */}
                 <IssueAdd createIssue={this.createIssue.bind(this)} />
             </React.Fragment>
         );
