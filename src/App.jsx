@@ -103,6 +103,11 @@ class IssueList extends React.Component {
     constructor() {
         super();
         this.state = { issues: [] };
+        // Before we bound this to the context it was executed in, but we may
+        // as well add it to the constructor here of the main parent component,
+        // this is because it will always need to be bound, so let's just do it
+        // one time.
+        this.createIssue = this.createIssue.bind(this);
     }
 
     componentDidMount() {
@@ -132,8 +137,7 @@ class IssueList extends React.Component {
                 <hr />
                 <IssueTable issues={this.state.issues} />
                 <hr />
-                {/* { Bind this to IssueAdd in context of where it's called } */}
-                <IssueAdd createIssue={this.createIssue.bind(this)} />
+                <IssueAdd createIssue={this.createIssue} />
             </React.Fragment>
         );
     }
