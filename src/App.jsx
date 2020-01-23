@@ -94,9 +94,19 @@ class IssueAdd extends React.Component {
         //     this.props.createIssue(sampleIssue);
         // }, 2000);
     }
+    handleSubmit(e) {
+        e.preventDefault();
+        const form = document.forms.issueAdd;
+        const issue = {
+            owner: form.owner.value,
+            title: form.title.value,
+            status: 'New'
+        };
+        this.props.createIssue(issue);
+    }
     render() {
         return (
-            <form>
+            <form name="issueAdd" onSubmit={this.handleSubmit}>
                 <input type="text" name="owner" placeholder="Owner" />
                 <input type="text" name="title" placeholder="Title" />
                 <button>Add</button>
