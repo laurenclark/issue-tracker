@@ -90,9 +90,9 @@ class IssueRow extends React.Component {
 class IssueAdd extends React.Component {
     constructor() {
         super();
-        setTimeout(() => {
-            this.props.createIssue(sampleIssue);
-        }, 2000);
+        // setTimeout(() => {
+        //     this.props.createIssue(sampleIssue);
+        // }, 2000);
     }
     render() {
         return (
