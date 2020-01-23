@@ -19,11 +19,11 @@ const initialIssues = [
     }
 ];
 
-const sampleIssue = {
-    status: 'New',
-    owner: 'Lauren',
-    title: 'Completion date should be optional'
-};
+// const sampleIssue = {
+//     status: 'New',
+//     owner: 'Lauren',
+//     title: 'Completion date should be optional'
+// };
 
 class IssueFilter extends React.Component {
     render() {
@@ -93,6 +93,7 @@ class IssueAdd extends React.Component {
         // setTimeout(() => {
         //     this.props.createIssue(sampleIssue);
         // }, 2000);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
     handleSubmit(e) {
         e.preventDefault();
@@ -135,6 +136,12 @@ class IssueList extends React.Component {
             this.setState({ issues: initialIssues });
         }, 500);
     }
+
+    /**
+     * Create an issue - expects an object with at least Owner and Title
+     *
+     * @param {Object} Issue - Owner, Title, (Due Date, Effort)
+     */
 
     createIssue(issue) {
         // Basic incremento spell
