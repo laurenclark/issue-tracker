@@ -95,7 +95,13 @@ class IssueAdd extends React.Component {
         }, 2000);
     }
     render() {
-        return <div>This is a placeholder for a form to add an issue.</div>;
+        return (
+            <form>
+                <input type="text" name="owner" placeholder="Owner" />
+                <input type="text" name="title" placeholder="Title" />
+                <button>Add</button>
+            </form>
+        );
     }
 }
 
