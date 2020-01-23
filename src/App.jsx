@@ -19,53 +19,45 @@ const initialIssues = [
     }
 ];
 
-// const sampleIssue = {
-//     status: 'New',
-//     owner: 'Lauren',
-//     title: 'Completion date should be optional'
-// };
-
 class IssueFilter extends React.Component {
     render() {
         return <div>This is a placeholder for the issue filter.</div>;
     }
 }
-class IssueTable extends React.Component {
-    render() {
-        // 💡 You should always use a unique identifier from the dataset like an ID
-        // Never use the Array index (things.indexOf(thing))
-        // This is because if an item is removed/changed, React uses that identifier
-        // decide whether or not to re-render, so you would always be rerendering on deletion
-        // which is unperformant and defeats the purpose of using a reactive library
-        // it can also cause a bug where React doesn't know which item to remove in order
-        // See: https://stackoverflow.com/questions/46735483/error-do-not-use-array-index-in-keys
-        const issueRows = this.props.issues.map(issue => (
-            <IssueRow key={issue.index} issue={issue} />
-        ));
+const IssueTable = props => {
+    // 💡 You should always use a unique identifier from the dataset like an ID
+    // Never use the Array index (things.indexOf(thing))
+    // This is because if an item is removed/changed, React uses that identifier
+    // decide whether or not to re-render, so you would always be rerendering on deletion
+    // which is unperformant and defeats the purpose of using a reactive library
+    // it can also cause a bug where React doesn't know which item to remove in order
+    // See: https://stackoverflow.com/questions/46735483/error-do-not-use-array-index-in-keys
+    const issueRows = props.issues.map(issue => (
+        <IssueRow key={issue.index} issue={issue} />
+    ));
 
-        return (
-            <table className="bordered-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Status</th>
-                        <th>Owner</th>
-                        <th>Created</th>
-                        <th>Effort</th>
-                        <th>Due Date</th>
-                        <th>Title</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {/* {issues.map(issue => (
+    return (
+        <table className="bordered-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Status</th>
+                    <th>Owner</th>
+                    <th>Created</th>
+                    <th>Effort</th>
+                    <th>Due Date</th>
+                    <th>Title</th>
+                </tr>
+            </thead>
+            <tbody>
+                {/* {issues.map(issue => (
                         <IssueRow key={issue.id} issue={issue} />
                     ))} */}
-                    {issueRows}
-                </tbody>
-            </table>
-        );
-    }
-}
+                {issueRows}
+            </tbody>
+        </table>
+    );
+};
 
 class IssueRow extends React.Component {
     render() {
@@ -101,7 +93,8 @@ class IssueAdd extends React.Component {
         const issue = {
             owner: form.owner.value,
             title: form.title.value,
-            status: 'New'
+            status: 'New',
+            effort: form.effort.value
         };
         this.props.createIssue(issue);
     }
@@ -110,6 +103,7 @@ class IssueAdd extends React.Component {
             <form name="issueAdd" onSubmit={this.handleSubmit}>
                 <input type="text" name="owner" placeholder="Owner" />
                 <input type="text" name="title" placeholder="Title" />
+                <input type="number" name="effort" placeholder="1" />
                 <button>Add</button>
             </form>
         );
