@@ -59,25 +59,23 @@ const IssueTable = props => {
     );
 };
 
-class IssueRow extends React.Component {
-    render() {
-        const issue = this.props.issue;
-        return (
-            <tr>
-                <td>{issue.id}</td>
-                <td>{issue.status}</td>
-                <td>{issue.owner}</td>
-                {/* This will always be here or else the issue wasn't created :p */}
-                <td>{issue.created.toDateString()}</td>
-                <td>{issue.effort}</td>
-                {/*  💡 We always check the property exists as a truthy value
+const IssueRow = props => {
+    const issue = props.issue;
+    return (
+        <tr>
+            <td>{issue.id}</td>
+            <td>{issue.status}</td>
+            <td>{issue.owner}</td>
+            {/* This will always be here or else the issue wasn't created :p */}
+            <td>{issue.created.toDateString()}</td>
+            <td>{issue.effort}</td>
+            {/*  💡 We always check the property exists as a truthy value
                         before we perform a method on it */}
-                <td>{issue.due ? issue.due.toDateString() : ''}</td>
-                <td>{issue.title}</td>
-            </tr>
-        );
-    }
-}
+            <td>{issue.due ? issue.due.toDateString() : ''}</td>
+            <td>{issue.title}</td>
+        </tr>
+    );
+};
 
 class IssueAdd extends React.Component {
     constructor() {
