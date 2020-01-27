@@ -13,14 +13,6 @@ const resolvers = {
     }
 };
 
-const typeDefs = `
-  type Query {
-    about: String!
-  }
-  type Mutation {
-    setAboutMessage(message: String!): String
-  }`;
-
 function setAboutMessage(_, { message }) {
     return (aboutMessage = message);
 }
