@@ -2,25 +2,24 @@
 const express = require('express');
 const { ApolloServer } = require('apollo-server-express');
 
-const app = express();
-const port = 3000;
-let aboutMessage = `Issue Tracker API v1.0`;
+let aboutMessage = 'Issue Tracker API v1.0';
 
 const resolvers = {
     Query: {
         about: () => aboutMessage
     },
-    Mutation: {}
+    Mutation: {
+        setAboutMessage
+    }
 };
 
 const typeDefs = `
-    type Query {
-        about: String!
-    }
-    type Mutation {
-        setAboutMessage(message: String!) :String;
-    }
-`;
+  type Query {
+    about: String!
+  }
+  type Mutation {
+    setAboutMessage(message: String!): String
+  }`;
 
 function setAboutMessage(_, { message }) {
     return (aboutMessage = message);
@@ -31,7 +30,8 @@ const server = new ApolloServer({
     resolvers
 });
 
-server.applyMiddleware({ app, path: '/graphql' });
+const app = express();
+const port = 3000;
 
 /**
  * Mount with 'Use'
@@ -40,6 +40,8 @@ server.applyMiddleware({ app, path: '/graphql' });
  * @param {Function} Handler
  */
 app.use(express.static('public'));
+
+server.applyMiddleware({ app, path: '/graphql' });
 
 // Run with `$ node server.js`
 app.listen(port, () => {
