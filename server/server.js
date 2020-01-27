@@ -1,8 +1,9 @@
 // Set up our Express server to serve static assets
 const express = require('express');
+const { ApolloServer } = require('apollo-server-express');
+
 const app = express();
 const port = 3000;
-
 let aboutMessage = `Issue Tracker API v1.0`;
 
 const resolvers = {
@@ -24,6 +25,13 @@ const typeDefs = `
 function setAboutMessage(_, { message }) {
     return (aboutMessage = message);
 }
+
+const server = new ApolloServer({
+    typeDefs,
+    resolvers
+});
+
+server.applyMiddleware({ app, path: '/graphql' });
 
 /**
  * Mount with 'Use'
