@@ -1,24 +1,3 @@
-const initialIssues = [
-    {
-        id: 1,
-        status: 'New',
-        owner: 'Ravan',
-        effort: 5,
-        created: new Date('2018-08-15'),
-        due: undefined,
-        title: 'Error in console when clicking Add'
-    },
-    {
-        id: 2,
-        status: 'Assigned',
-        owner: 'Eddie',
-        effort: 14,
-        created: new Date('2018-08-16'),
-        due: new Date('2018-08-30'),
-        title: 'Missing bottom border on panel'
-    }
-];
-
 class IssueFilter extends React.Component {
     render() {
         return <div>This is a placeholder for the issue filter.</div>;
@@ -66,12 +45,14 @@ const IssueRow = props => {
             <td>{issue.id}</td>
             <td>{issue.status}</td>
             <td>{issue.owner}</td>
-            {/* This will always be here or else the issue wasn't created :p */}
-            <td>{issue.created.toDateString()}</td>
+            {/* This will always be here or else the  issue wasn't created :p */}
+            {/* <td>{ issue.created.toDateString()}</td> */}
+            <td>{issue.created}</td>
             <td>{issue.effort}</td>
             {/*  💡 We always check the property exists as a truthy value
                         before we perform a method on it */}
-            <td>{issue.due ? issue.due.toDateString() : ''}</td>
+            {/* <td>{ issue.due ?  issue.due.toDateString() : ''}</td> */}
+            <td>{issue.due}</td>
             <td>{issue.title}</td>
         </tr>
     );
@@ -123,10 +104,31 @@ class IssueList extends React.Component {
         this.loadData();
     }
 
-    loadData() {
-        setTimeout(() => {
-            this.setState({ issues: initialIssues });
-        }, 500);
+    async loadData() {
+        const query = `query{
+            issueList {
+                id
+                title 
+                status 
+                owner 
+                created 
+                effort 
+                due
+            }
+        }`;
+
+        // Await loadData
+        const response = await fetch('/graphql', {
+            // Using post not get as we dont' want caching
+            method: 'POST',
+            // Indicate content is JSON
+            headers: { 'Content-Type': 'application/json' },
+            // Equiv "data" in Axios but we need to stringify it manually
+            body: JSON.stringify({ query })
+        });
+
+        const result = await response.json();
+        this.setState({ issues: result.data.issueList });
     }
 
     /**
