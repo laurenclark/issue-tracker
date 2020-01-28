@@ -13,6 +13,8 @@ type Issue {
     status: String!
     owner: String!
     effort: Int
-    created: String!
-    due: String
+    created: GraphQLDate!
+    due: GraphQLDate
 }
+
+scalar GraphQLDate
