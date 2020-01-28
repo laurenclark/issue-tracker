@@ -2,6 +2,7 @@
 const express = require('express');
 const fs = require('fs');
 const { ApolloServer } = require('apollo-server-express');
+const { GraphQLScalarType } = require('graphql');
 
 let aboutMessage = 'Issue Tracker API v1.0';
 
@@ -26,6 +27,23 @@ const issuesDB = [
     }
 ];
 
+const GraphQLDate = new GraphQLScalarType({
+    name: 'GraphQLDate',
+    description: 'A Date() type in GraphQL as a scalar',
+    /*--------------------------------------------------------------
+    ## toISOString()
+    https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString
+    -   A string representing the given date in the ISO 8601 format 
+        according to universal time.
+
+    -   Example - let today = new Date('05 October 2011 14:48 UTC')
+        console.log(today.toISOString())  // 2011-10-05T14:48:00.000Z
+    --------------------------------------------------------------*/
+    serialize(value) {
+        return value.toISOString();
+    }
+});
+
 const resolvers = {
     Query: {
         about: () => aboutMessage,
@@ -33,7 +51,8 @@ const resolvers = {
     },
     Mutation: {
         setAboutMessage
-    }
+    },
+    GraphQLDate
 };
 
 function setAboutMessage(_, { message }) {
