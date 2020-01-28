@@ -1,5 +1,6 @@
 // Set up our Express server to serve static assets
 const express = require('express');
+const fs = require('fs');
 const { ApolloServer } = require('apollo-server-express');
 
 let aboutMessage = 'Issue Tracker API v1.0';
@@ -18,7 +19,7 @@ function setAboutMessage(_, { message }) {
 }
 
 const server = new ApolloServer({
-    typeDefs,
+    typeDefs: fs.readFileSync('./server/schema.graphql', 'utf-8'),
     resolvers
 });
 
