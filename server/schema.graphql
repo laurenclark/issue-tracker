@@ -14,5 +14,5 @@ type Issue {
     owner: String!
     effort: Int
     created: String!
-    due: String!
+    due: String
 }
