@@ -34,7 +34,9 @@ const GraphQLDate = new GraphQLScalarType({
     ## toISOString()
     https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString
     -   A string representing the given date in the ISO 8601 format 
-        according to universal time.
+        according to *universal time*. We do this so that the date from
+        the backend is as *universal* as possible and can be converted
+        on the client dependent on locale. 
 
     -   Example - let today = new Date('05 October 2011 14:48 UTC')
         console.log(today.toISOString())  // 2011-10-05T14:48:00.000Z
