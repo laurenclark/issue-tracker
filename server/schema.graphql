@@ -14,7 +14,7 @@ type Issue {
 input IssueInputs {
     title: String!
     "Optional, if not supplied, will be set to 'New'"
-    status: String
+    status: String = "New"
     owner: String
     effort: Int
     due: GraphQLDate

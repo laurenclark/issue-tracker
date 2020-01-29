@@ -85,7 +85,6 @@ function issueAdd(_, { issue }) {
     issue.created = new Date();
     // ID++
     issue.id = issuesDB.length + 1;
-    if (issue.status === undefined) issue.status = 'New';
     issuesDB.push(issue);
     return issue;
 }
