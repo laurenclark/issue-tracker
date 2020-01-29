@@ -43,6 +43,23 @@ const GraphQLDate = new GraphQLScalarType({
     --------------------------------------------------------------*/
     serialize(value) {
         return value.toISOString();
+    },
+    /*--------------------------------------------------------------
+    ## AST - [A]bstract [S]yntax [T]ree
+    - For our date parser we're only interested if the ast.kind is a string,
+    if not we'll set it to undefined so it's treated as an error, because
+    it could not be converted how we need it to be.
+    --------------------------------------------------------------*/
+    parseLiteral(ast) {
+        return ast.kind === Kind.STRING ? new Date(ast.value) : undefined;
+    },
+
+    /*--------------------------------------------------------------
+    ## If the input is supplied as a Query variable which is a JS object,
+       a pre-parsed JSON value. So we just construct the date straight out of that
+    --------------------------------------------------------------*/
+    parseValue(value) {
+        return new Date(value);
     }
 });
 
@@ -52,13 +69,24 @@ const resolvers = {
         issueList
     },
     Mutation: {
-        setAboutMessage
+        setAboutMessage,
+        issueAdd
     },
     GraphQLDate
 };
 
 function setAboutMessage(_, { message }) {
     return (aboutMessage = message);
+}
+
+function issueAdd(_, { issue }) {
+    // Created always gets the date here
+    issue.created = new Date();
+    // ID++
+    issue.id = issuesDB.length + 1;
+    if (issue.status === undefined) issue.status = 'New';
+    issuesDB.push(issue);
+    return issue;
 }
 
 function issueList() {
