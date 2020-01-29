@@ -1,7 +1,17 @@
 const dateRegex = new RegExp('^\\d\\d\\d\\d-\\d\\d-\\d\\d');
 
+/**
+ * Reviver to see if value is an starts as an
+ * ISO date and then return a new Date object.
+ *
+ * @param {String} key
+ * @param {String} value
+ */
+
 function jsonDateReviver(key, value) {
-    if (dateRegex.test(value)) return new Date(value);
+    if (dateRegex.test(value)) {
+        return new Date(value);
+    }
     return value;
 }
 
