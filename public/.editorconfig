@@ -1,0 +1,21 @@
+# indicate this is the root of the project
+root = true
+
+[*]
+indent_style = space
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+indent_size = 4
+
+[*.html]
+indent_size = 4
+max_line_length = 80
+
+[*.js]
+indent_size = 4
+max_line_length = 120
+
+[*.css, *.scss]
+indent_size = 4
+max_line_length = 70
