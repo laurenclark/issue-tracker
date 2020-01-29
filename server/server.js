@@ -3,6 +3,7 @@ const express = require('express');
 const fs = require('fs');
 const { ApolloServer } = require('apollo-server-express');
 const { GraphQLScalarType } = require('graphql');
+const { Kind } = require('graphql/language');
 
 let aboutMessage = 'Issue Tracker API v1.0';
 
@@ -45,6 +46,14 @@ const GraphQLDate = new GraphQLScalarType({
         return value.toISOString();
     },
     /*--------------------------------------------------------------
+    ## If the input is supplied as a Query variable which is a JS object,
+    a pre-parsed JSON value. So we just construct the date straight out of that
+    --------------------------------------------------------------*/
+    parseValue(value) {
+        return new Date(value);
+    },
+
+    /*--------------------------------------------------------------
     ## AST - [A]bstract [S]yntax [T]ree
     - For our date parser we're only interested if the ast.kind is a string,
     if not we'll set it to undefined so it's treated as an error, because
@@ -52,14 +61,6 @@ const GraphQLDate = new GraphQLScalarType({
     --------------------------------------------------------------*/
     parseLiteral(ast) {
         return ast.kind === Kind.STRING ? new Date(ast.value) : undefined;
-    },
-
-    /*--------------------------------------------------------------
-    ## If the input is supplied as a Query variable which is a JS object,
-       a pre-parsed JSON value. So we just construct the date straight out of that
-    --------------------------------------------------------------*/
-    parseValue(value) {
-        return new Date(value);
     }
 });
 
