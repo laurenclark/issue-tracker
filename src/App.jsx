@@ -1,3 +1,10 @@
+const dateRegex = new RegExp('^\\d\\d\\d\\d-\\d\\d-\\d\\d');
+
+function jsonDateReviver(key, value) {
+    if (dateRegex.test(value)) return new Date(value);
+    return value;
+}
+
 class IssueFilter extends React.Component {
     render() {
         return <div>This is a placeholder for the issue filter.</div>;
@@ -46,13 +53,11 @@ const IssueRow = props => {
             <td>{issue.status}</td>
             <td>{issue.owner}</td>
             {/* This will always be here or else the  issue wasn't created :p */}
-            {/* <td>{ issue.created.toDateString()}</td> */}
-            <td>{issue.created}</td>
+            <td>{issue.created.toDateString()}</td>
             <td>{issue.effort}</td>
             {/*  💡 We always check the property exists as a truthy value
-                        before we perform a method on it */}
-            {/* <td>{ issue.due ?  issue.due.toDateString() : ''}</td> */}
-            <td>{issue.due}</td>
+                    before we perform a method on it */}
+            <td>{issue.due ? issue.due.toDateString() : ''}</td>
             <td>{issue.title}</td>
         </tr>
     );
@@ -127,7 +132,12 @@ class IssueList extends React.Component {
             body: JSON.stringify({ query })
         });
 
-        const result = await response.json();
+        const body = await response.text();
+
+        // A "reviver" function which applies some function to each key of the
+        // array. We must get the response in plain text (.text()) format
+        // or we cannot use the JSON.parse() method, and we cannot use our reviver!
+        const result = JSON.parse(body, jsonDateReviver);
         this.setState({ issues: result.data.issueList });
     }
 
