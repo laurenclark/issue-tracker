@@ -1,7 +1,7 @@
 // Set up our Express server to serve static assets
 const express = require('express');
 const fs = require('fs');
-const { ApolloServer } = require('apollo-server-express');
+const { ApolloServer, UserInputError } = require('apollo-server-express');
 const { GraphQLScalarType } = require('graphql');
 const { Kind } = require('graphql/language');
 
@@ -92,12 +92,32 @@ function setAboutMessage(_, { message }) {
  */
 
 function issueAdd(_, { issue }) {
+    issueValidate(issue);
     // Created always gets the date here
     issue.created = new Date();
     // ID++
     issue.id = issuesDB.length + 1;
     issuesDB.push(issue);
     return issue;
+}
+
+function issueValidate(_, { issue }) {
+    const errors = [];
+    const titleErrorMsg = `The field "title" myst be at least 3 characters long.`;
+    const ownerIfAssignedErrorMsg = `The field "owner" is required when the status is set to "assigned"`;
+
+    if (issue.title.length < 3) {
+        errors.push(titleErrorMsg);
+    }
+    if (issue.status === 'Assigned' && !issue.owner) {
+        errors.push(ownerIfAssignedErrorMsg);
+    }
+
+    if (errors.length === 1) {
+        throw new UserInputError('Invalid input', { errors });
+    } else if (errors.length > 1) {
+        throw new UserInputError('Invalid inputs', { errors });
+    }
 }
 
 function issueList() {
