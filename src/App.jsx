@@ -87,7 +87,8 @@ class IssueAdd extends React.Component {
         const issue = {
             owner: form.owner.value,
             title: form.title.value,
-            status: 'New',
+            // status: 'New',
+            due: new Date(new Date().getTime() + 100 * 60 * 24 * 10),
             effort: form.effort.value
         };
         this.props.createIssue(issue);
@@ -154,18 +155,25 @@ class IssueList extends React.Component {
     /**
      * Create an issue - expects an object with at least Owner and Title
      *
-     * @param {Object} Issue - Owner, Title, (Due Date, Effort)
+     * @param {Object} Issue { Title, Owner[, Due, Status, Effort] }
      */
 
-    createIssue(issue) {
-        // Basic incremento spell
-        issue.id = this.state.issues.length + 1;
-        issue.created = new Date();
-        // Nothing specified so we're just copying the current array
-        const newIssueList = this.state.issues.slice();
-        newIssueList.push(issue);
-        this.setState({ issues: newIssueList });
+    async createIssue(issue) {
+        const query = `mutation{issueAdd(issue:{
+            title: "${issue.title}",
+            owner: "${issue.owner}",
+            due: "${issue.due.toISOString()}"
+        }){
+            id
+        }}`;
+        const response = await fetch('/graphql', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query })
+        });
+        this.loadData();
     }
+
     render() {
         return (
             <React.Fragment>
