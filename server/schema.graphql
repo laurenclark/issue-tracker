@@ -3,18 +3,26 @@ scalar GraphQLDate
 type Issue {
     id: Int!
     title: String!
-    status: String!
+    status: StatusType!
     owner: String
     effort: Int
     created: GraphQLDate!
     due: GraphQLDate
 }
 
+"Enums will always be interpreted as a string in JS"
+enum StatusType {
+    New
+    Assigned
+    Fixed
+    Closed
+}
+
 "Toned down Issue, used as inputs, without server generated values."
 input IssueInputs {
     title: String!
     "Optional, if not supplied, will be set to 'New'"
-    status: String = "New"
+    status: StatusType = New
     owner: String
     effort: Int
     due: GraphQLDate
