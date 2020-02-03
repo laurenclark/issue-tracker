@@ -76,9 +76,20 @@ const resolvers = {
     GraphQLDate
 };
 
+/**
+ * Set the about message string
+ *
+ * @param {String} Message
+ */
 function setAboutMessage(_, { message }) {
     return (aboutMessage = message);
 }
+
+/**
+ * Add a new issue
+ *
+ * @param {Object} Issue {title, owner required}
+ */
 
 function issueAdd(_, { issue }) {
     // Created always gets the date here
