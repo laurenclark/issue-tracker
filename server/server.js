@@ -85,6 +85,23 @@ function setAboutMessage(_, { message }) {
     return (aboutMessage = message);
 }
 
+function issueList() {
+    return issuesDB;
+}
+
+function issueValidate(issue) {
+    const errors = [];
+    if (issue.title.length < 3) {
+        errors.push('Field "title" must be at least 3 characters long.');
+    }
+    if (issue.status === 'Assigned' && !issue.owner) {
+        errors.push('Field "owner" is required when status is "Assigned"');
+    }
+    if (errors.length > 0) {
+        throw new UserInputError('Invalid input(s)', { errors });
+    }
+}
+
 /**
  * Add a new issue
  *
@@ -101,32 +118,13 @@ function issueAdd(_, { issue }) {
     return issue;
 }
 
-function issueValidate(_, { issue }) {
-    const errors = [];
-    const titleErrorMsg = `The field "title" myst be at least 3 characters long.`;
-    const ownerIfAssignedErrorMsg = `The field "owner" is required when the status is set to "assigned"`;
-
-    if (issue.title.length < 3) {
-        errors.push(titleErrorMsg);
-    }
-    if (issue.status === 'Assigned' && !issue.owner) {
-        errors.push(ownerIfAssignedErrorMsg);
-    }
-
-    if (errors.length === 1) {
-        throw new UserInputError('Invalid input', { errors });
-    } else if (errors.length > 1) {
-        throw new UserInputError('Invalid inputs', { errors });
-    }
-}
-
-function issueList() {
-    return issuesDB;
-}
-
 const server = new ApolloServer({
     typeDefs: fs.readFileSync('./server/schema.graphql', 'utf-8'),
-    resolvers
+    resolvers,
+    formatError: error => {
+        console.log(error);
+        return error;
+    }
 });
 
 const app = express();
