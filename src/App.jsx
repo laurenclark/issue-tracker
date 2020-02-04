@@ -76,9 +76,6 @@ const IssueRow = props => {
 class IssueAdd extends React.Component {
     constructor() {
         super();
-        // setTimeout(() => {
-        //     this.props.createIssue(sampleIssue);
-        // }, 2000);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
     handleSubmit(e) {
@@ -87,7 +84,6 @@ class IssueAdd extends React.Component {
         const issue = {
             owner: form.owner.value,
             title: form.title.value,
-            // status: 'New',
             due: new Date(new Date().getTime() + 100 * 60 * 24 * 10)
         };
         this.props.createIssue(issue);
@@ -101,6 +97,41 @@ class IssueAdd extends React.Component {
                 <button>Add</button>
             </form>
         );
+    }
+}
+
+async function graphQLFetch(query, variables = {}) {
+    try {
+        const response = await fetch('/graphql', {
+            // Using post not get as we don't want caching
+            method: 'POST',
+            // Indicate content is JSON
+            headers: { 'Content-Type': 'application/json' },
+            // Equiv. "data" in Axios but we need to stringify it manually
+            body: JSON.stringify({ query, variables })
+        });
+
+        // Await loadData
+        const body = await response.text();
+
+        // A "reviver" function which applies some function to each key of the
+        // array. We must get the response in plain text (.text()) format
+        // or we cannot use the JSON.parse() method, and we cannot use our reviver!
+        const result = JSON.parse(body, jsonDateReviver);
+
+        if (result.errors) {
+            const error = result.errors[0];
+            if (error.extensions.code === 'BAD_USER_INPUT') {
+                const details = error.extensions.exception.errors.join('\n ');
+                alert(`${error.message}: \n ${details}`);
+            } else {
+                alert(`${error.extesions.code}: ${error.message}`);
+            }
+        }
+
+        return result.data;
+    } catch (error) {
+        alert(`Error in sending data to server: ${error.message}`);
     }
 }
 
@@ -132,23 +163,10 @@ class IssueList extends React.Component {
             }
         }`;
 
-        // Await loadData
-        const response = await fetch('/graphql', {
-            // Using post not get as we dont' want caching
-            method: 'POST',
-            // Indicate content is JSON
-            headers: { 'Content-Type': 'application/json' },
-            // Equiv "data" in Axios but we need to stringify it manually
-            body: JSON.stringify({ query })
-        });
-
-        const body = await response.text();
-
-        // A "reviver" function which applies some function to each key of the
-        // array. We must get the response in plain text (.text()) format
-        // or we cannot use the JSON.parse() method, and we cannot use our reviver!
-        const result = JSON.parse(body, jsonDateReviver);
-        this.setState({ issues: result.data.issueList });
+        const data = await graphQLFetch(query);
+        if (data) {
+            this.setState({ issues: data.IssueList });
+        }
     }
 
     /**
@@ -159,17 +177,15 @@ class IssueList extends React.Component {
 
     async createIssue(issue) {
         const query = `mutation issueAdd($issue: IssueInputs!) {
-        issueAdd(issue: $issue) {
-            id
-        }
-    }`;
+            issueAdd(issue: $issue) {
+                    id
+                }
+        }`;
 
-        const response = await fetch('/graphql', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ query, variables: { issue } })
-        });
-        this.loadData();
+        const data = await graphQLFetch(query, { issue });
+        if (data) {
+            this.loadData();
+        }
     }
 
     render() {
