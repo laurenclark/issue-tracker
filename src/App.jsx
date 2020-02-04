@@ -45,12 +45,7 @@ const IssueTable = props => {
                     <th>Title</th>
                 </tr>
             </thead>
-            <tbody>
-                {/* {issues.map(issue => (
-                        <IssueRow key={issue.id} issue={issue} />
-                    ))} */}
-                {issueRows}
-            </tbody>
+            <tbody>{issueRows}</tbody>
         </table>
     );
 };
@@ -130,8 +125,8 @@ async function graphQLFetch(query, variables = {}) {
         }
 
         return result.data;
-    } catch (error) {
-        alert(`Error in sending data to server: ${error.message}`);
+    } catch (e) {
+        alert(`Error in sending data to server: ${e.message}`);
     }
 }
 
@@ -165,7 +160,7 @@ class IssueList extends React.Component {
 
         const data = await graphQLFetch(query);
         if (data) {
-            this.setState({ issues: data.IssueList });
+            this.setState({ issues: data.issueList });
         }
     }
 
@@ -178,8 +173,8 @@ class IssueList extends React.Component {
     async createIssue(issue) {
         const query = `mutation issueAdd($issue: IssueInputs!) {
             issueAdd(issue: $issue) {
-                    id
-                }
+                id
+            }
         }`;
 
         const data = await graphQLFetch(query, { issue });
