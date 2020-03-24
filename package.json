@@ -4,9 +4,9 @@
     "description": "A mern stack example",
     "main": "public/index.html",
     "scripts": {
-        "start": "concurrently \"npm run serve\" \"npm run open\" \"npm run compile\"",
+        "start": "concurrently \"npm run serve\" wait-on http://localhost:3000 \"npm run open\" \"npm run compile\"",
         "serve": "nodemon -w server -e js,graphql server/server.js",
-        "open": "wait-on open http://localhost:3000",
+        "open": "open http://localhost:3000",
         "compile": "babel src --out-dir public",
         "watch": "babel src --out-dir public --watch --verbose",
         "test": "echo \"Error: no test specified\" && exit 1"
