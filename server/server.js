@@ -128,7 +128,7 @@ const server = new ApolloServer({
 });
 
 const app = express();
-const port = 3000;
+const port = 8085;
 
 /**
  * Mount with 'Use'
@@ -142,5 +142,5 @@ server.applyMiddleware({ app, path: '/graphql' });
 
 // Run with `$ node server.js`
 app.listen(port, () => {
-    console.log(`App started on ${port}`);
+    console.log(`App started: http://localhost:${port}`);
 });
